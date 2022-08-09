@@ -1,4 +1,4 @@
-module github.com/bww/tinytable
+module github.com/treno-io/tinytable
 
 go 1.18
 
