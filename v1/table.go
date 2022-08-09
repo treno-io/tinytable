@@ -27,24 +27,24 @@ func less[T any](a, b Row[T]) bool {
 
 type Table[T any] struct {
 	sync.RWMutex
-	cf map[string]*btree.BTreeG[Row[T]]
+	cf map[string]*CF[T]
 }
 
 func New[T any]() *Table[T] {
 	return &Table[T]{
-		cf: make(map[string]*btree.BTreeG[Row[T]]),
+		cf: make(map[string]*CF[T]),
 	}
 }
 
 func (t *Table[T]) CF(name string) *CF[T] {
 	cf, ok := t.cf[name]
 	if !ok {
-		cf = btree.NewG[Row[T]](2, less[T])
+		cf = &CF[T]{
+			data: btree.NewG[Row[T]](2, less[T]),
+		}
 		t.cf[name] = cf
 	}
-	return &CF[T]{
-		data: cf,
-	}
+	return cf
 }
 
 type CF[T any] struct {
