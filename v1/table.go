@@ -67,20 +67,20 @@ func (f *CF[T]) Every(t Iterator[T]) {
 	})
 }
 
-func (f *CF[T]) Start(start string, t Iterator[T]) {
-	f.data.AscendGreaterOrEqual(Row[T]{Key: start}, func(e Row[T]) bool {
-		return t(e.Key, e.Val)
-	})
-}
-
 func (f *CF[T]) Prefix(prefix string, t Iterator[T]) {
 	f.Range(prefix, successor(prefix), t)
 }
 
 func (f *CF[T]) Range(start, end string, t Iterator[T]) {
-	f.data.AscendRange(Row[T]{Key: start}, Row[T]{Key: end}, func(e Row[T]) bool {
-		return t(e.Key, e.Val)
-	})
+	if end == "" {
+		f.data.AscendGreaterOrEqual(Row[T]{Key: start}, func(e Row[T]) bool {
+			return t(e.Key, e.Val)
+		})
+	} else {
+		f.data.AscendRange(Row[T]{Key: start}, Row[T]{Key: end}, func(e Row[T]) bool {
+			return t(e.Key, e.Val)
+		})
+	}
 }
 
 func (f *CF[T]) Put(k string, v T) {

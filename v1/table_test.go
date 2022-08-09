@@ -53,19 +53,6 @@ func TestPaths(t *testing.T) {
 		assert.Equal(t, 234, a[4])
 	}
 
-	// iterate over every element beginning at some point
-	a = make([]int, 0)
-	cf.Start("b", func(k string, v int) bool {
-		a = append(a, v)
-		return true
-	})
-	if assert.Len(t, a, 4) {
-		assert.Equal(t, 90, a[0])
-		assert.Equal(t, 91, a[1])
-		assert.Equal(t, 92, a[2])
-		assert.Equal(t, 234, a[3])
-	}
-
 	// iterate over every elements with a prefix
 	a = make([]int, 0)
 	cf.Prefix("b", func(k string, v int) bool {
@@ -101,6 +88,19 @@ func TestPaths(t *testing.T) {
 		assert.Equal(t, 90, a[1])
 		assert.Equal(t, 91, a[2])
 		assert.Equal(t, 92, a[3])
+	}
+
+	// as a special case, where the end of the range is an empty string, iterate over the entire set beginning at the start key
+	a = make([]int, 0)
+	cf.Range("b", "", func(k string, v int) bool {
+		a = append(a, v)
+		return true
+	})
+	if assert.Len(t, a, 4) {
+		assert.Equal(t, 90, a[0])
+		assert.Equal(t, 91, a[1])
+		assert.Equal(t, 92, a[2])
+		assert.Equal(t, 234, a[3])
 	}
 
 	// delete an item
