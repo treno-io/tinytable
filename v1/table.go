@@ -77,10 +77,13 @@ func (f *CF[T]) Get(k string) (T, bool) {
 
 func (f *CF[T]) Every(t Iterator[T]) {
 	var i int
+	if f.conf.Debug > 0 {
+		log.Printf(logpfx + "get/*")
+	}
 	f.data.Ascend(func(e Row[T]) bool {
 		if f.conf.Debug > 0 {
 			i++
-			log.Printf(logpfx+"get/n: #%d: %v → %v", i, e.Key, e.Val)
+			log.Printf(logpfx+"get/*: #%d: %v → %v", i, e.Key, e.Val)
 		}
 		return t(e.Key, e.Val)
 	})
@@ -92,6 +95,9 @@ func (f *CF[T]) Prefix(prefix string, t Iterator[T]) {
 
 func (f *CF[T]) Range(start, end string, t Iterator[T]) {
 	var i int
+	if f.conf.Debug > 0 {
+		log.Printf(logpfx+"get/n: [%s..%s]", start, end)
+	}
 	if end == "" {
 		f.data.AscendGreaterOrEqual(Row[T]{Key: start}, func(e Row[T]) bool {
 			if f.conf.Debug > 0 {
