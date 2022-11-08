@@ -80,7 +80,7 @@ func (f *CF[T]) Every(t Iterator[T]) {
 	f.data.Ascend(func(e Row[T]) bool {
 		if f.conf.Debug > 0 {
 			i++
-			log.Printf(logpfx+"get/n: #%d %v → %v", i, e.Key, e.Val)
+			log.Printf(logpfx+"get/n: #%d: %v → %v", i, e.Key, e.Val)
 		}
 		return t(e.Key, e.Val)
 	})
@@ -96,7 +96,7 @@ func (f *CF[T]) Range(start, end string, t Iterator[T]) {
 		f.data.AscendGreaterOrEqual(Row[T]{Key: start}, func(e Row[T]) bool {
 			if f.conf.Debug > 0 {
 				i++
-				log.Printf(logpfx+"get/n: [%s..] #%d %v → %v", start, i, e.Key, e.Val)
+				log.Printf(logpfx+"get/n: [%s..] #%d: %v → %v", start, i, e.Key, e.Val)
 			}
 			return t(e.Key, e.Val)
 		})
@@ -104,7 +104,7 @@ func (f *CF[T]) Range(start, end string, t Iterator[T]) {
 		f.data.AscendRange(Row[T]{Key: start}, Row[T]{Key: end}, func(e Row[T]) bool {
 			if f.conf.Debug > 0 {
 				i++
-				log.Printf(logpfx+"get/n: [%s..%s] #%d %v → %v", start, end, i, e.Key, e.Val)
+				log.Printf(logpfx+"get/n: [%s..%s] #%d: %v → %v", start, end, i, e.Key, e.Val)
 			}
 			return t(e.Key, e.Val)
 		})
